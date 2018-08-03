@@ -1,0 +1,124 @@
+﻿body{
+    background-color:dodgerblue;
+}
+.container{
+    padding:40px;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top:10%;
+    display:block;
+    width:60%;
+    background-color:aliceblue;
+    border-radius:8px;
+    min-width:60%;
+}
+
+h1{
+background-color:gainsboro;
+padding:2px;
+border-radius:8px;
+}
+
+h1, h2{
+    text-align:center;
+}
+
+#myapp{
+    margin:4%;
+}
+
+#userForm{
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    width:30%;
+}
+
+h1 {
+    margin-bottom:2%;
+}
+
+input[type="email"] {
+    margin-bottom:6%;
+}
+
+blockquote {
+    color: hotpink;
+    margin: 1%;
+    font-style: italic;
+    text-align: center;
+}
+
+footer {
+    padding: 10px;
+    margin-top: 50px;
+}
+#navigation {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 15%;
+    margin-bottom: 20px;
+}
+
+ul {
+    list-style: none;
+    display: inline-flex;
+}
+
+a {
+    font-size: larger;
+    padding: 2px;
+    margin: 2px;
+    color: indianred;
+}
+
+
+@media screen and (max-width: 1180px) {
+
+    .container {
+        margin-top: 15%;
+    }
+
+}
+
+
+
+@media screen and (max-width: 704px) {
+    #navigation {
+        width: 5%;
+    }
+    input[type="email"] {
+        width: 100%;
+    }
+    *{
+        font-size:18px;
+    }
+    ul{
+        margin-left:-50px;
+    }
+    .container {
+        margin-top: 20%;
+    }
+
+  
+}
+
+@media screen and (max-width: 392px) {
+    #navigation {
+        width: 5%;
+    }
+
+    input[type="email"] {
+       
+        overflow: scroll;   
+    }
+
+    * {
+        font-size: small;
+    }
+
+    .container {
+        margin-top: 25%;
+    }
+}

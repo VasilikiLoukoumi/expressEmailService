@@ -1,0 +1,18 @@
+<% include partials/start.ejs %>
+<% include partials/nav.ejs %>
+<div id="landing">
+<h1>Express Email Service</h1>
+
+<h2>What is your email adress?</h2>
+<div id="userForm">
+<form action="/new" method="post" >
+<label for="useremail">
+Email:
+</label>
+<input type="email" name="useremail" value="<%= qs.useremail %>"/>
+<input type="submit" value="submit"/>
+</form>
+</div>
+</div>
+<% include partials/footer.ejs %>
+<% include partials/finish.ejs %>

@@ -1,0 +1,24 @@
+<% include partials/start.ejs %>
+<% include partials/nav.ejs %>
+<div id="form">
+<h1>Form</h1>
+<h2>Your email: <% data.useremail %></h2>
+<form>
+<label for="email">Email address:</label>
+
+<input type="email" name="email"/>
+
+<label for="subject">Subject:</label>
+
+<input type="text" name="subject"/>
+
+<label for="msg">Message:</label>
+
+<textarea name="msg"></textarea>
+
+<input type="submit" value="submit"/>
+</form>
+
+</div>
+<% include partials/footer.ejs %>
+<% include partials/finish.ejs %>

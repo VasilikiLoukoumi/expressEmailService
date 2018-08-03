@@ -1,0 +1,25 @@
+{
+  "name": "expressmail",
+  "version": "1.0.0",
+  "description": "Express email application",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "email",
+    "express",
+    "node",
+    "ejs"
+  ],
+  "author": "Vasiliki Loukoumi",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "express-mailer": "^0.3.1",
+    "imap": "^0.8.19",
+    "nodemailer": "^4.6.7"
+  }
+}
