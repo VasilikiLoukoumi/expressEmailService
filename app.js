@@ -30,8 +30,8 @@ app.post('/form', (req, res) => {
     let userpassword = req.body.userpassword;
 
     req.checkBody('useremail', 'Email is required.').notEmpty();
-    req.checkBody('userpassword', 'Password is required').notEmpty();
-
+    req.checkBody('userpassword', 'Password is required.').notEmpty();
+    req.checkBody("useremail", "Please enter a valid email address.").isEmail();
     var errors = req.validationErrors();
     if (errors) {     
         res.render(`${__dirname}/views/userValidation`, { data: errors });   
@@ -54,35 +54,54 @@ app.get('/userValidation', (req, res) => {
     res.render(`${__dirname}/views/userValidation`);
 });
 
+app.get('/messageValidation', (req, res) => {
+    res.render(`${__dirname}/views/messageValidation`);
+});
+
 app.post('/feedback', function (req, res) {
     var host = getHost(req.body.myemail);
     var hostname = host.substr(0, host.indexOf('.'));
 
-    let transporter = nodeMailer.createTransport({
-        service: hostname,
-        port: 465,
-        secure: false,
-        auth: {
-            user: req.body.myemail,
-            pass: req.body.mypass
-        }
-    });
-    let mailOptions = {
-        from: req.body.myemail, 
-        to: req.body.email, 
-        subject: req.body.subject, 
-        text: req.body.msg
-    };
+    //Validate
+    req.checkBody("email", "Please enter a valid email address.").isEmail();
+    req.checkBody('email', 'Email is required.').notEmpty();
+    req.checkBody('subject', 'Subject is required.').notEmpty();
+    req.checkBody('msg', 'Message is required.').notEmpty();
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        var data = "";
-        if (error) {
-            data = error;
-            res.render(`${__dirname}/views/feedback`, {data: data});
-        }
-        data = "Message sent";
-        res.render(`${__dirname}/views/feedback`, { data: data });
-    });
+    var errors = req.validationErrors();
+   
+    if (errors) {
+        res.render(`${__dirname}/views/messageValidation`, { data: errors });
+    }
+    else {
+        let transporter = nodeMailer.createTransport({
+            service: hostname,
+            port: 465,
+            secure: false,
+            auth: {
+                user: req.body.myemail,
+                pass: req.body.mypass
+            }
+        });
+        let mailOptions = {
+            from: req.body.myemail,
+            to: req.body.email,
+            subject: req.body.subject,
+            text: req.body.msg
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            let data = "";
+            if (error) {
+                data = error;
+                res.render(`${__dirname}/views/feedback`, { data: data });
+            }
+            else {
+                data = "Message sent";
+                res.render(`${__dirname}/views/feedback`, { data: data });
+            }
+        });
+    }
 });
 
 
