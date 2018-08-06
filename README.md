@@ -1,2 +1,0 @@
-# expressEmailService
-Express email application

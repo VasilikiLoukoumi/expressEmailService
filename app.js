@@ -1,9 +1,8 @@
 ﻿const express = require('express');
-const mailer = require('express-mailer');
+const nodeMailer = require('nodemailer');
 const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
-
 
 app.use('/styles', express.static('styles'));
 app.use('/scripts', express.static('scripts'));
@@ -12,28 +11,63 @@ app.engine('ejs', require('ejs').renderFile);
 app.set('view engine', 'ejs');﻿
 
 
-//install body-parser to use POST
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+
+
 
 app.get('/', (req, res) => {    
-    res.render(`${__dirname}/views/index`, { qs: req.query });
+    res.render(`${__dirname}/views/index`);
     
 });
 
-// POST 
-app.post('/', urlencodedParser, (req, res) => {
-    console.log(req.body);
-    res.render(`${__dirname}/views/form`, { data: req.body });
- 
+app.post('/form', (req, res) => {    
+    res.render(`${__dirname}/views/form`, { data: req.body });   
 }); 
 
-app.get('/new', (req, res) => {
-    res.render(`${__dirname}/views/form`);
+
+app.get('/form', (req, res) => {
+ res.render(`${__dirname}/views/form`);
 });
 
 app.get('/feedback', (req, res) => {
     res.render(`${__dirname}/views/feedback`);
 });
+
+app.post('/feedback', function (req, res) {
+    var host = getHost(req.body.myemail);
+    var hostname = host.substr(0, host.indexOf('.'));
+
+    let transporter = nodeMailer.createTransport({
+        service: hostname,
+        port: 465,
+        secure: false,
+        auth: {
+            user: req.body.myemail,
+            pass: req.body.mypass
+        }
+    });
+    let mailOptions = {
+        from: req.body.myemail, 
+        to: req.body.email, 
+        subject: req.body.subject, 
+        text: req.body.msg
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            res.render(`${__dirname}/views/feedback`, {data: error});
+        }
+        
+        res.render(`${__dirname}/views/feedback`, { data: req.body });
+    });
+});
+
+
+function getHost(str) {
+    return str.split('@')[1];
+}
 
 
 app.listen(port, () => console.log(`Server listening on port ${port}.`));
