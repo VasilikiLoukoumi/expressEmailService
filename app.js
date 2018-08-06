@@ -56,11 +56,13 @@ app.post('/feedback', function (req, res) {
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
+        var data = "";
         if (error) {
-            res.render(`${__dirname}/views/feedback`, {data: error});
+            data = error;
+            res.render(`${__dirname}/views/feedback`, {data: data});
         }
-        
-        res.render(`${__dirname}/views/feedback`, { data: req.body });
+        data = "Message sent";
+        res.render(`${__dirname}/views/feedback`, { data: data });
     });
 });
 
