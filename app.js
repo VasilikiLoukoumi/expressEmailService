@@ -1,12 +1,16 @@
 ﻿const express = require('express');
 const nodeMailer = require('nodemailer');
 const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
 const app = express();
 const port = 3000;
 
 app.use('/styles', express.static('styles'));
+app.use('/moduleBoo', express.static(__dirname + '/node_modules/bootstrap/dist/'));
+app.use('/moduleJQ', express.static(__dirname + '/node_modules/jquery/dist/'));
+app.use('/modulePop', express.static(__dirname + '/node_modules/popper.js/dist/'));
 app.use('/scripts', express.static('scripts'));
-
+app.use(expressValidator());
 app.engine('ejs', require('ejs').renderFile);
 app.set('view engine', 'ejs');﻿
 
@@ -21,8 +25,21 @@ app.get('/', (req, res) => {
 });
 
 app.post('/form', (req, res) => {    
-    res.render(`${__dirname}/views/form`, { data: req.body });   
-}); 
+   
+    let useremail = req.body.useremail;
+    let userpassword = req.body.userpassword;
+
+    req.checkBody('useremail', 'Email is required.').notEmpty();
+    req.checkBody('userpassword', 'Password is required').notEmpty();
+
+    var errors = req.validationErrors();
+    if (errors) {     
+        res.render(`${__dirname}/views/userValidation`, { data: errors });   
+    }
+    else {
+        res.render(`${__dirname}/views/form`, { data: req.body });   
+    }
+ }); 
 
 
 app.get('/form', (req, res) => {
@@ -31,6 +48,10 @@ app.get('/form', (req, res) => {
 
 app.get('/feedback', (req, res) => {
     res.render(`${__dirname}/views/feedback`);
+});
+
+app.get('/userValidation', (req, res) => {
+    res.render(`${__dirname}/views/userValidation`);
 });
 
 app.post('/feedback', function (req, res) {

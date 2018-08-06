@@ -1,0 +1,15 @@
+﻿<% include partials/start.ejs %>
+<% include partials/nav.ejs %>
+<div id="userValidation">
+<h1 class="jumbotron text-center nodecolor">Warnings</h1>
+  <ul  class="list-group list-group-flush">
+<% for(var i=0; i<data.length; i++) {%>
+   <li class="list-group-item list-group-item-danger"><%= data[i].msg %></li>
+<% } %>
+</ul>
+</div>
+<div class="text-center" id="backbtnDiv"> 
+<button class="btn-primary"><a href="/" id="backBtn">Go Back</a></button>
+</div>
+<% include partials/footer.ejs %>
+<% include partials/finish.ejs %>

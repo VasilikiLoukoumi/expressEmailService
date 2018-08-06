@@ -1,20 +1,25 @@
-<% include partials/start.ejs %>
+﻿<% include partials/start.ejs %>
 <% include partials/nav.ejs %>
 <div id="landing">
-<h1>Express Email Service</h1>
-<h2>Credentials</h2>
+<h1 class="jumbotron text-center nodecolor">📨
+Express Email Service</h1>
+<h2 class="text-center text-primary">Credentials</h2>
 
 <div id="userForm">
-<form action="/form" method="post" >
-<label for="useremail">
+<form action="/form" method="post">
+<div class="form-group">
+<label for="useremail" class="control-label">
 Email:
 </label>
-<input type="email" name="useremail" value=""/>
-<label for="userpass">
+<input type="email" name="useremail" value="" class="form-control"/>
+</div>
+<div class="form-group">
+<label for="userpass" class="control-label">
 Password:
 </label>
-<input type="password" name="userpassword" value=""/>
-<input type="submit" value="submit"/>
+<input type="password" name="userpassword" value="" class="form-control"/>
+</div>
+<input type="submit" value="submit" class="btn-primary" class="form-control"/>
 </form>
 </div>
 </div>
