@@ -8,7 +8,7 @@ const port = 3000;
 app.use('/styles', express.static('styles'));
 app.use('/moduleBoo', express.static(__dirname + '/node_modules/bootstrap/dist/'));
 app.use('/moduleJQ', express.static(__dirname + '/node_modules/jquery/dist/'));
-app.use('/modulePop', express.static(__dirname + '/node_modules/popper.js/dist/'));
+app.use('/modulePop', express.static(__dirname + '/node_modules/popper.js/dist/umd/'));
 app.use('/scripts', express.static('scripts'));
 app.use(expressValidator());
 app.engine('ejs', require('ejs').renderFile);

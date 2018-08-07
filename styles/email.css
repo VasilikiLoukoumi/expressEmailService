@@ -27,3 +27,11 @@ li {
 #backbtnDiv{
     margin-top:2%;
 }
+
+a:hover {
+    transform:scale(1.2,1.2);
+}
+
+.btn-primary:hover{
+    transform:scale(1.2,1.2);
+}
