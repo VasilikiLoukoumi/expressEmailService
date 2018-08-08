@@ -5,7 +5,13 @@ const expressValidator = require('express-validator');
 const app = express();
 const port = 3000;
 
-let sessionValues = [];
+let sessionData = {
+    "useremail": "",
+    "userpassword": "",
+    "email": "",
+    "subject": "",
+    "msg":""
+};
 
 app.use('/styles', express.static('styles'));
 app.use('/moduleBoo', express.static(__dirname + '/node_modules/bootstrap/dist/'));
@@ -21,46 +27,46 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-app.get('/', (req, res) => {  
-    sessionValues = [];
-    res.render(`${__dirname}/views/index`);    
+app.get('/', (req, res) => {
+    res.render(`${__dirname}/views/index`, { sessionData: sessionData });  
+    
 });
 
 app.post('/form', (req, res) => {   
     let useremail = req.body.useremail;
     let userpassword = req.body.userpassword;
-    sessionValues.push({
-        "useremail": useremail
-    }, {
-            "userpassword": userpassword
-        });
-
+    //store session data
+    sessionData.useremail = useremail;
+    sessionData.userpassword = userpassword;   
+    //
     req.checkBody('useremail', 'Email is required.').notEmpty();
     req.checkBody('userpassword', 'Password is required.').notEmpty();
     req.checkBody("useremail", "Please enter a valid email address.").isEmail();
+
     var errors = req.validationErrors();
-    if (errors) {
-        console.log(`Session values are ${JSON.stringify(sessionValues)}`);
-        res.render(`${__dirname}/views/userValidation`, { data: errors });   
+
+    if (errors) {       
+       res.render(`${__dirname}/views/userValidation`, { data: errors });   
     }
-    else {
-        res.render(`${__dirname}/views/form`, { data: req.body });   
+    else {  
+        res.render(`${__dirname}/views/form`, { sessionData: sessionData }); 
+        
     }
  }); 
 
 
 app.get('/form', (req, res) => {
-    if (sessionValues.length > 3) {
-        sessionValues.splice(2, 3);
-    }
- res.render(`${__dirname}/views/form`);
+
+    res.render(`${__dirname}/views/form`, { sessionData: sessionData });
+   
 });
 
 app.get('/feedback', (req, res) => {
     res.render(`${__dirname}/views/feedback`);
 });
 
-app.get('/userValidation', (req, res) => {    
+app.get('/userValidation', (req, res) => {
+    
     res.render(`${__dirname}/views/userValidation`);
   
 });
@@ -79,21 +85,15 @@ app.post('/feedback', function (req, res) {
     req.checkBody('subject', 'Subject is required.').notEmpty();
     req.checkBody('msg', 'Message is required.').notEmpty();
 
+    //store session data
+    sessionData.email = req.body.email;
+    sessionData.subject = req.body.subject;
+    sessionData.msg = req.body.msg;
+     //
+
     var errors = req.validationErrors();
 
-    sessionValues.push({
-        "receiver": req.body.email
-    },
-        {
-            "subject": req.body.subject
-        },
-        {
-            "message": req.body.msg
-        }
-    );
-
     if (errors) {
-        console.log(`Session values are ${JSON.stringify(sessionValues)}`);
         res.render(`${__dirname}/views/messageValidation`, { data: errors });
     }
     else {
@@ -132,6 +132,7 @@ app.post('/feedback', function (req, res) {
 function getHost(str) {
     return str.split('@')[1];
 }
+
 
 
 app.listen(port, () => console.log(`Server listening on port ${port}.`));

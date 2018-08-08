@@ -5,21 +5,21 @@
 
 <form id="messageForm" method="POST" action="/feedback">
 
-<input type="hidden" name="myemail" value="<%= data.useremail %>"/>
+<input type="hidden" name="myemail" value="<%= sessionData.useremail %>"/>
 
-<input type="hidden" name="mypass" value="<%= data.userpassword %>"/>
+<input type="hidden" name="mypass" value="<%= sessionData.userpassword %>"/>
 
 <div class="form-group">
 <label for="email" class="control-label">Recipient address:</label>
-<input class="form-control" type="email" name="email" data-toggle="tooltip" data-placement="top" title="Enter recipient address!" required />
+<input class="form-control" type="email" name="email" data-toggle="tooltip" data-placement="top" title="Enter recipient address!" value = "<%= sessionData.email %>" required />
 </div>
 <div class="form-group">
 <label for="subject" class="control-label">Subject:</label>
-<input class="form-control" type="text" name="subject" data-toggle="tooltip" data-placement="top" title="Enter subject!" required />
+<input class="form-control" type="text" name="subject" data-toggle="tooltip" data-placement="top" title="Enter subject!" value = "<%= sessionData.subject %>"  required />
 </div>
 <div class="form-group">
 <label for="msg" class="control-label">Message:</label>
-<textarea class="form-control" name="msg" data-toggle="tooltip" data-placement="top" title="Enter message!" required></textarea>
+<textarea class="form-control" name="msg" data-toggle="tooltip" data-placement="top" title="Enter message!" value = "<%= sessionData.msg %>" required><%= sessionData.msg %></textarea>
 </div>
 <input type="submit" value="submit" class="btn-primary" class="form-control"/>
 </form>
