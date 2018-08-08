@@ -5,12 +5,13 @@ const expressValidator = require('express-validator');
 const app = express();
 const port = 3000;
 
+
 let sessionData = {
     "useremail": "",
     "userpassword": "",
     "email": "",
     "subject": "",
-    "msg":""
+    "msg": ""
 };
 
 app.use('/styles', express.static('styles'));
@@ -27,7 +28,7 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-app.get('/', (req, res) => {
+app.get('/', (req, res) => { 
     res.render(`${__dirname}/views/index`, { sessionData: sessionData });  
     
 });
@@ -114,15 +115,18 @@ app.post('/feedback', function (req, res) {
         };
 
         
-        transporter.sendMail(mailOptions, (error, info) => {            
+        transporter.sendMail(mailOptions, (error, info) => {
+            sessionData = {};
             let data = "";
             if (error) {             
-                data = error;               
+                data = error;
                 res.render(`${__dirname}/views/feedback`, { data: data });
+      
             }
             else {
                 data = "Message sent";
-                res.render(`${__dirname}/views/feedback`, { data: data });
+                res.render(`${__dirname}/views/feedback`, { data: data });    
+             
             }
         });
     }
