@@ -5,6 +5,8 @@ const expressValidator = require('express-validator');
 const app = express();
 const port = 3000;
 
+let sessionValues = [];
+
 app.use('/styles', express.static('styles'));
 app.use('/moduleBoo', express.static(__dirname + '/node_modules/bootstrap/dist/'));
 app.use('/moduleJQ', express.static(__dirname + '/node_modules/jquery/dist/'));
@@ -19,21 +21,26 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-app.get('/', (req, res) => {    
-    res.render(`${__dirname}/views/index`);
-    
+app.get('/', (req, res) => {  
+    sessionValues = [];
+    res.render(`${__dirname}/views/index`);    
 });
 
-app.post('/form', (req, res) => {    
-   
+app.post('/form', (req, res) => {   
     let useremail = req.body.useremail;
     let userpassword = req.body.userpassword;
+    sessionValues.push({
+        "useremail": useremail
+    }, {
+            "userpassword": userpassword
+        });
 
     req.checkBody('useremail', 'Email is required.').notEmpty();
     req.checkBody('userpassword', 'Password is required.').notEmpty();
     req.checkBody("useremail", "Please enter a valid email address.").isEmail();
     var errors = req.validationErrors();
-    if (errors) {     
+    if (errors) {
+        console.log(`Session values are ${JSON.stringify(sessionValues)}`);
         res.render(`${__dirname}/views/userValidation`, { data: errors });   
     }
     else {
@@ -43,6 +50,9 @@ app.post('/form', (req, res) => {
 
 
 app.get('/form', (req, res) => {
+    if (sessionValues.length > 3) {
+        sessionValues.splice(2, 3);
+    }
  res.render(`${__dirname}/views/form`);
 });
 
@@ -50,11 +60,12 @@ app.get('/feedback', (req, res) => {
     res.render(`${__dirname}/views/feedback`);
 });
 
-app.get('/userValidation', (req, res) => {
+app.get('/userValidation', (req, res) => {    
     res.render(`${__dirname}/views/userValidation`);
+  
 });
 
-app.get('/messageValidation', (req, res) => {
+app.get('/messageValidation', (req, res) => {    
     res.render(`${__dirname}/views/messageValidation`);
 });
 
@@ -69,8 +80,20 @@ app.post('/feedback', function (req, res) {
     req.checkBody('msg', 'Message is required.').notEmpty();
 
     var errors = req.validationErrors();
-   
+
+    sessionValues.push({
+        "receiver": req.body.email
+    },
+        {
+            "subject": req.body.subject
+        },
+        {
+            "message": req.body.msg
+        }
+    );
+
     if (errors) {
+        console.log(`Session values are ${JSON.stringify(sessionValues)}`);
         res.render(`${__dirname}/views/messageValidation`, { data: errors });
     }
     else {
@@ -90,10 +113,11 @@ app.post('/feedback', function (req, res) {
             text: req.body.msg
         };
 
-        transporter.sendMail(mailOptions, (error, info) => {
+        
+        transporter.sendMail(mailOptions, (error, info) => {            
             let data = "";
-            if (error) {
-                data = error;
+            if (error) {             
+                data = error;               
                 res.render(`${__dirname}/views/feedback`, { data: data });
             }
             else {
