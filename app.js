@@ -11,7 +11,8 @@ let sessionData = {
     "userpassword": "",
     "email": "",
     "subject": "",
-    "msg": ""
+    "msg": "",
+    "comingFrom":""
 };
 
 app.use('/styles', express.static('styles'));
@@ -28,9 +29,19 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-app.get('/', (req, res) => { 
-    res.render(`${__dirname}/views/index`, { sessionData: sessionData });  
-    
+app.get('/', (req, res) => {
+    if (sessionData.comingFrom !== 'userValidation') {
+        sessionData = {
+            "useremail": "",
+            "userpassword": "",
+            "email": "",
+            "subject": "",
+            "msg": "",
+            "comingFrom": ""
+        };
+       
+    }
+    res.render(`${__dirname}/views/index`, { sessionData: sessionData });    
 });
 
 app.post('/form', (req, res) => {   
@@ -46,10 +57,12 @@ app.post('/form', (req, res) => {
 
     var errors = req.validationErrors();
 
-    if (errors) {       
+    if (errors) {
+       sessionData.comingFrom = 'userValidation';
        res.render(`${__dirname}/views/userValidation`, { data: errors });   
     }
     else {  
+        sessionData.comingFrom = '';
         res.render(`${__dirname}/views/form`, { sessionData: sessionData }); 
         
     }
@@ -57,7 +70,6 @@ app.post('/form', (req, res) => {
 
 
 app.get('/form', (req, res) => {
-
     res.render(`${__dirname}/views/form`, { sessionData: sessionData });
    
 });
@@ -66,8 +78,7 @@ app.get('/feedback', (req, res) => {
     res.render(`${__dirname}/views/feedback`);
 });
 
-app.get('/userValidation', (req, res) => {
-    
+app.get('/userValidation', (req, res) => {    
     res.render(`${__dirname}/views/userValidation`);
   
 });
