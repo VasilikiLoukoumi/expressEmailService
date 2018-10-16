@@ -3,7 +3,7 @@ const nodeMailer = require('nodemailer');
 const bodyParser = require('body-parser');
 const expressValidator = require('express-validator');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 8000;
 
 
 let sessionData = {
